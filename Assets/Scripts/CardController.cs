@@ -6,10 +6,12 @@ public class CardController : MonoBehaviour
 {
     CardView view;// 見かけ(view)に関することを操作
     CardModel model; // データ(model)に関することを操作
+    public CardMovement movement; // 移動(movement)に関することを操作
 
     private void Awake()
     {
         view = GetComponent<CardView>();
+        movement = GetComponent<CardMovement>();
     }
 
     public void Init(int cardID)

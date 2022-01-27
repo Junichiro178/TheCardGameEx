@@ -6,7 +6,8 @@ public class GameManager : MonoBehaviour
 {
 
     [SerializeField] Transform playerHandTransform,
-                               enemyHandTransform;
+                               enemyHandTransform,
+                               enemyFieldTransform;
     [SerializeField] CardController cardPrefab;
 
     // プレイヤーのターンかどうか
@@ -57,17 +58,37 @@ public class GameManager : MonoBehaviour
     public void ChangeTurn()
     {
         isPlayerTurn = !isPlayerTurn;
+
+        // ドローする
+        if (isPlayerTurn)
+        {
+            CreateCard(playerHandTransform);
+        }
+        else
+        {
+            CreateCard(enemyHandTransform);
+        }
+
         TurnCalculation();
     }
 
     void PlayerTurn()
     {
         Debug.Log("Playerのターン");
+
     }
 
     void EnemyTurn()
     {
         Debug.Log("Enemyのターン");
+        // 手札のカードリストを取得
+        CardController[] cardList = enemyHandTransform.GetComponentsInChildren<CardController>();
+
+        // 場に出すカードを選択
+        CardController card = cardList[0];
+
+        // カードを移動
+        card.movement.SetCardTransform(enemyFieldTransform);
 
         ChangeTurn();
     }
