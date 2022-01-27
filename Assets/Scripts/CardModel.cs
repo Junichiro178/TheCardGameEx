@@ -20,4 +20,18 @@ public class CardModel
         cost = cardEntity.cost;
         icon = cardEntity.icon;
     }
+
+    void Damage(int dmg)
+    {
+        hp -= dmg;
+        if (hp <= 0)
+        {
+            hp = 0;
+        }
+    }
+
+    public void Attack(CardController card)
+    {
+        card.model.Damage(at);
+    }
 }
