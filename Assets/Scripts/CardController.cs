@@ -20,4 +20,17 @@ public class CardController : MonoBehaviour
         view.Show(model);
     }
 
+    // カードの生存チェック
+    public void CheckAlive()
+    {
+        if (model.isAlive)
+        {
+            view.Refresh(model);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
 }

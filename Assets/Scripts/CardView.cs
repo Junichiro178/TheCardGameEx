@@ -19,4 +19,10 @@ public class CardView : MonoBehaviour
         costText.text = cardModel.cost.ToString(); 
         iconImage.sprite = cardModel.icon;
     }
+
+    public void Refresh(CardModel cardModel)
+    {
+        hpText.text = cardModel.hp.ToString();
+        atText.text = cardModel.at.ToString();
+    }
 }

@@ -115,6 +115,8 @@ public class GameManager : MonoBehaviour
         defender.model.Attack(attacker);
         Debug.Log("attacker HP:" + attacker.model.hp);
         Debug.Log("defender HP:" + defender.model.hp);
+        attacker.CheckAlive();
+        defender.CheckAlive();
     }
 
 }
