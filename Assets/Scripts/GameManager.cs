@@ -11,8 +11,19 @@ public class GameManager : MonoBehaviour
                                playerFieldTransform;
     [SerializeField] CardController cardPrefab;
 
+    // シングルトン化（どこからでもアクセスできるようにする）
+    public static GameManager instance;
+
     // プレイヤーのターンかどうか
     bool isPlayerTurn;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
 
     void Start()
     {
@@ -39,7 +50,7 @@ public class GameManager : MonoBehaviour
      void CreateCard(Transform hand)
     {
         CardController card = Instantiate(cardPrefab, hand, false);
-        card.Init(2);
+        card.Init(3);
     }
 
     // ターンを計算する
@@ -106,7 +117,7 @@ public class GameManager : MonoBehaviour
         ChangeTurn();
     }
 
-    void CardsBattle(CardController attacker, CardController defender)
+    public void CardsBattle(CardController attacker, CardController defender)
     {
         Debug.Log("CardsBattle");
         Debug.Log("attacker HP:"+ attacker.model.hp);
