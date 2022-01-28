@@ -20,10 +20,17 @@ public class CardController : MonoBehaviour
         view.Show(model);
     }
 
+    // モンスターを攻撃可能にする処理
+    public void SetCanAttack(bool canAttack)
+    {
+        model.canAttack = canAttack;
+        view.DisplaySelectablePanel(canAttack);
+    }
+
     public void Attack(CardController enemyCard)
     {
         model.Attack(enemyCard);
-        view.DisplaySelectablePanel(false);
+        SetCanAttack(false);
     }
 
     // カードの生存チェック
