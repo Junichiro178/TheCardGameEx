@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] GameObject resultPanel;
+    [SerializeField] Text resultText;
 
     [SerializeField] Transform playerHandTransform,
                                enemyHandTransform,
@@ -30,9 +32,6 @@ public class GameManager : MonoBehaviour
     int playerHeroHp;
     int enemyHeroHp;
 
-
-
-
     private void Awake()
     {
         if (instance == null)
@@ -46,16 +45,49 @@ public class GameManager : MonoBehaviour
         StartGame();
     }
 
+    // ゲームスタート
     void StartGame()
     {
+        // リザルトパネルの非表示
+        resultPanel.SetActive(false);
+
         // HeroHPの定義
-        playerHeroHp = 20;
-        enemyHeroHp = 20;
+        playerHeroHp = 1;
+        enemyHeroHp = 1;
         RefreshHeroHP();
 
         InitHand();
         isPlayerTurn = true;
         TurnCalculation();
+    }
+
+    // ゲームリスタート
+    public void RestartGame()
+    {
+        // 全てのカードの削除
+        foreach (Transform card in playerHandTransform)
+        {
+            Destroy(card.gameObject);
+        }
+        foreach (Transform card in playerFieldTransform)
+        {
+            Destroy(card.gameObject);
+        }
+        foreach (Transform card in enemyHandTransform)
+        {
+            Destroy(card.gameObject);
+        }
+        foreach (Transform card in enemyFieldTransform)
+        {
+            Destroy(card.gameObject);
+        }
+
+        // デッキの再取得
+        playerDeck = new List<int>() { 1, 2, 3, 4 };
+        enemyDeck = new List<int>() { 4, 3, 2, 1 };
+
+        StartGame();
+
     }
 
     void InitHand()
@@ -211,6 +243,7 @@ public class GameManager : MonoBehaviour
         }
         attacker.SetCanAttack(false);
         RefreshHeroHP();
+        CheckHeroHP();
     } 
 
     // HeroのHPを更新する
@@ -218,6 +251,22 @@ public class GameManager : MonoBehaviour
     {
         playerHeroHpText.text = playerHeroHp.ToString();
         enemyHeroHpText.text = enemyHeroHp.ToString();
+    }
+
+    void CheckHeroHP()
+    {
+        if (playerHeroHp <= 0 || enemyHeroHp <= 0)
+        {
+            resultPanel.SetActive(true);
+            if (playerHeroHp <= 0)
+            {
+                resultText.text = "You Lose";
+            }
+            else
+            {
+                resultText.text = "You Win"; 
+            }
+        }
     }
 
 }
