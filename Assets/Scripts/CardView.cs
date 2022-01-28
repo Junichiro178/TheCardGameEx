@@ -10,6 +10,7 @@ public class CardView : MonoBehaviour
     [SerializeField] Text atText;
     [SerializeField] Text costText;
     [SerializeField] Image iconImage;
+    [SerializeField] GameObject selectablePanel;
 
     public void Show(CardModel cardModel)
     {
@@ -24,5 +25,10 @@ public class CardView : MonoBehaviour
     {
         hpText.text = cardModel.hp.ToString();
         atText.text = cardModel.at.ToString();
+    }
+
+    public void DisplaySelectablePanel(bool show)
+    {
+        selectablePanel.SetActive(show);
     }
 }

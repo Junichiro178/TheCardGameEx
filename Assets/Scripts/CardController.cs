@@ -20,6 +20,12 @@ public class CardController : MonoBehaviour
         view.Show(model);
     }
 
+    public void Attack(CardController enemyCard)
+    {
+        model.Attack(enemyCard);
+        view.DisplaySelectablePanel(false);
+    }
+
     // カードの生存チェック
     public void CheckAlive()
     {

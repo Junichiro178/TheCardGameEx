@@ -122,8 +122,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("CardsBattle");
         Debug.Log("attacker HP:"+ attacker.model.hp);
         Debug.Log("defender HP:" + defender.model.hp);
-        attacker.model.Attack(defender);
-        defender.model.Attack(attacker);
+        attacker.Attack(defender);
+        defender.Attack(attacker);
         Debug.Log("attacker HP:" + attacker.model.hp);
         Debug.Log("defender HP:" + defender.model.hp);
         attacker.CheckAlive();

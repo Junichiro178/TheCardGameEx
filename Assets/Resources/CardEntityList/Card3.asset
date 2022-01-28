@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9093f9db0f74543ae8d870116991d801, type: 3}
-  m_Name: Card2
+  m_Name: Card3
   m_EditorClassIdentifier: 
-  name: Cerberus
-  hp: 4
+  name: FireLords
+  hp: 6
   at: 4
-  cost: 4
-  icon: {fileID: 21300000, guid: a02f1670c123920408878691900a2ddc, type: 3}
+  cost: 5
+  icon: {fileID: 21300000, guid: 37db3613ed51d024188d1cae32d3e59a, type: 3}
