@@ -25,12 +25,28 @@ public class GameManager : MonoBehaviour
     List<int> playerDeck = new List<int>() { 1, 2, 3, 4 },
               enemyDeck  = new List<int>() { 4, 3, 2, 1 };
 
+    // HPテキストの取得
     [SerializeField] Text playerHeroHpText;
     [SerializeField] Text enemyHeroHpText;
 
     // HPの数値
     int playerHeroHp;
     int enemyHeroHp;
+
+    // マナテキストの取得
+    [SerializeField] Text playerManaCostText;
+    [SerializeField] Text enemyManaCostText;
+
+    // マナの数値
+    int playerManaCost;
+    int enemyManaCost;
+
+    // マナコストの画面表示
+    void ShowManaCost()
+    {
+        playerManaCostText.text = playerManaCost.ToString();
+        enemyManaCostText.text = enemyManaCost.ToString();
+    }
 
     private void Awake()
     {
@@ -55,6 +71,10 @@ public class GameManager : MonoBehaviour
         playerHeroHp = 1;
         enemyHeroHp = 1;
         RefreshHeroHP();
+
+        // マナの定義
+        playerManaCost = 1;
+        enemyManaCost = 1;
 
         InitHand();
         isPlayerTurn = true;
