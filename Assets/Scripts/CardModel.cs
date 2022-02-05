@@ -12,6 +12,7 @@ public class CardModel
     public Sprite icon;
     public bool isAlive = true;
     public bool canAttack;
+    public bool isFieldCard;
 
     public CardModel(int cardID)
     {

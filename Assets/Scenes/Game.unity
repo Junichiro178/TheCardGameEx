@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 127090199}
   - component: {fileID: 127090198}
   m_Layer: 5
-  m_Name: CountDownText
+  m_Name: TimeCountText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1292,8 +1292,13 @@ MonoBehaviour:
   cardPrefab: {fileID: 390032632301270907, guid: b284f8e8a5e434219824ab0ed2894a64, type: 3}
   playerHeroHpText: {fileID: 254597015}
   enemyHeroHpText: {fileID: 15868663}
-  playerManaCostText: {fileID: 0}
-  enemyManaCostText: {fileID: 0}
+  playerManaCostText: {fileID: 2125040643}
+  enemyManaCostText: {fileID: 413038352}
+  playerManaCost: 0
+  enemyManaCost: 0
+  playerDefaultManaCost: 0
+  enemyDefaultManaCost: 0
+  timeCountText: {fileID: 127090198}
 --- !u!4 &1168644430
 Transform:
   m_ObjectHideFlags: 0
@@ -1525,6 +1530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7845a46b35ca4c2380485bcae30061e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
 --- !u!1 &1653286554
 GameObject:
   m_ObjectHideFlags: 0
@@ -1730,6 +1736,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7845a46b35ca4c2380485bcae30061e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
 --- !u!1 &1697591538
 GameObject:
   m_ObjectHideFlags: 0

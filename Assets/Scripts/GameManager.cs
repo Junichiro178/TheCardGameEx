@@ -22,8 +22,8 @@ public class GameManager : MonoBehaviour
     bool isPlayerTurn;
 
     // デッキ
-    List<int> playerDeck = new List<int>() { 1, 2, 3, 4 },
-              enemyDeck  = new List<int>() { 4, 3, 2, 1 };
+    List<int> playerDeck = new List<int>() { 4, 3, 2, 1 },
+              enemyDeck  = new List<int>() { 1, 3, 2, 4 };
 
     // HPテキストの取得
     [SerializeField] Text playerHeroHpText;
@@ -40,12 +40,23 @@ public class GameManager : MonoBehaviour
     // マナの数値
     public int playerManaCost;
     public int enemyManaCost;
+    public int playerDefaultManaCost;
+    public int enemyDefaultManaCost;
+
+    // 時間管理
+    [SerializeField] Text timeCountText;
+    int timeCount;
 
     // マナコストの画面表示
     void ShowManaCost()
     {
         playerManaCostText.text = playerManaCost.ToString();
         enemyManaCostText.text = enemyManaCost.ToString();
+    }
+
+    void resetTimeCount()
+    {
+        timeCountText.text = timeCount.ToString();
     }
 
     // マナコストの消費
@@ -89,6 +100,9 @@ public class GameManager : MonoBehaviour
         // マナの定義
         playerManaCost = 1;
         enemyManaCost = 1;
+        playerDefaultManaCost = 1;
+        enemyDefaultManaCost = 1;
+
         ShowManaCost();
 
         InitHand();
@@ -118,8 +132,8 @@ public class GameManager : MonoBehaviour
         }
 
         // デッキの再取得
-        playerDeck = new List<int>() { 1, 2, 3, 4 };
-        enemyDeck = new List<int>() { 4, 3, 2, 1 };
+        playerDeck = new List<int>() { 4, 3, 2, 1 };
+        enemyDeck = new List<int>() { 1, 3, 2, 4 };
 
         StartGame();
 
@@ -159,6 +173,9 @@ public class GameManager : MonoBehaviour
     // ターンを計算する
     void TurnCalculation()
     {
+        StopAllCoroutines();
+        StartCoroutine(CountDown());
+
         if (isPlayerTurn)
         {
             PlayerTurn();
@@ -169,6 +186,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // カウントダウンを行う
+    IEnumerator CountDown()
+    {
+        // 時間定義
+        timeCount = 5;
+        resetTimeCount();
+
+        while (timeCount > 0)
+        {
+            yield return new WaitForSeconds(1.0f);
+            timeCount--;
+            resetTimeCount();
+        }
+        ChangeTurn();
+    }
+
     // ターンの切り替え
     public void ChangeTurn()
     {
@@ -177,13 +210,17 @@ public class GameManager : MonoBehaviour
         // ドローする
         if (isPlayerTurn)
         {
+            playerDefaultManaCost++;
+            playerManaCost = playerDefaultManaCost;
             GiveCardsTohand(playerDeck, playerHandTransform);
         }
         else
         {
+            enemyDefaultManaCost++;
+            enemyManaCost = enemyDefaultManaCost;
             GiveCardsTohand(enemyDeck, enemyHandTransform);
         }
-
+        ShowManaCost();
         TurnCalculation();
     }
 
@@ -217,10 +254,26 @@ public class GameManager : MonoBehaviour
         /*　場にカードを出す */
         // 手札のカードリストを取得
         CardController[] handcardList = enemyHandTransform.GetComponentsInChildren<CardController>();
-        // 場に出すカードを選択
-        CardController enemyCard = handcardList[0];
-        // カードを移動
-        enemyCard.movement.SetCardTransform(enemyFieldTransform);
+        // コスト以下のカードを取得
+        CardController[] lowerThanManaCardList = Array.FindAll(handcardList, card => card.model.cost <= enemyManaCost);
+
+        // コスト以下の中から...
+        if (lowerThanManaCardList.Length > 0)
+        {
+            // 場に出すカードを選択
+            CardController enemyCard = lowerThanManaCardList[0];
+
+            // カードを移動
+            enemyCard.movement.SetCardTransform(enemyFieldTransform);
+
+            // マナの消費
+            ReduceManaCost(enemyCard.model.cost, false);
+
+            //　フィールドのカードであることを示す
+            enemyCard.model.isFieldCard = true;
+        }
+
+
 
         /* 攻撃 */
         // フィールドのカードリストを取得する
