@@ -38,14 +38,28 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text enemyManaCostText;
 
     // マナの数値
-    int playerManaCost;
-    int enemyManaCost;
+    public int playerManaCost;
+    public int enemyManaCost;
 
     // マナコストの画面表示
     void ShowManaCost()
     {
         playerManaCostText.text = playerManaCost.ToString();
         enemyManaCostText.text = enemyManaCost.ToString();
+    }
+
+    // マナコストの消費
+    public void ReduceManaCost(int cost, bool isPlayerCard)
+    {
+        if (isPlayerCard)
+        {
+            playerManaCost -= cost;
+        }
+        else
+        {
+            enemyManaCost -= cost;
+        }
+        ShowManaCost();
     }
 
     private void Awake()
@@ -75,6 +89,7 @@ public class GameManager : MonoBehaviour
         // マナの定義
         playerManaCost = 1;
         enemyManaCost = 1;
+        ShowManaCost();
 
         InitHand();
         isPlayerTurn = true;

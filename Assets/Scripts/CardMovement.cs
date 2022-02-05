@@ -8,8 +8,28 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 {
     public Transform defaultParent;
 
+    // ドラッグアンドドロップ可能かどうかのフラグ
+    public bool isDragable;
+
     public void OnBeginDrag(PointerEventData eventData)
     {
+        // カードのコストとプレイヤーのマナコストを比較
+        CardController card = GetComponent<CardController>();
+        if (card.model.cost <= GameManager.instance.playerManaCost )
+        {
+            isDragable = true;
+        }
+        else
+        {
+            isDragable = false;
+        }
+
+        // プレイヤーのマナコストよりも高い場合処理終了
+        if (!isDragable)
+        {
+            return;
+        }
+
         defaultParent = transform.parent;
         transform.SetParent(defaultParent.parent, false);
         GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -17,11 +37,24 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     public void OnDrag(PointerEventData eventData)
     {
+        // プレイヤーのマナコストよりも高い場合処理終了
+        if (!isDragable)
+        {
+            return;
+        }
+
         transform.position = eventData.position;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+
+        // プレイヤーのマナコストよりも高い場合処理終了
+        if (!isDragable)
+        {
+            return;
+        }
+
         transform.SetParent(defaultParent, false);
         GetComponent<CanvasGroup>().blocksRaycasts = true;
     }
