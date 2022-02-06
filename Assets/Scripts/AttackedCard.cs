@@ -19,6 +19,11 @@ public class AttackedCard : MonoBehaviour, IDropHandler
         {
             return;
         }
+        // 同じプレイヤーのカード同士ならバトルしない
+        if (attacker.model.isPlayerCard == defender.model.isPlayerCard)
+        {
+            return;
+        }
 
         // canAttackフラグが立っており、攻撃可能な場合のみ攻撃する
         if (attacker.model.canAttack)

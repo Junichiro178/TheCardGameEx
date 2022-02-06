@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     int playerHeroHp;
     int enemyHeroHp;
 
+    [SerializeField] Transform playerHero;
+
     // マナテキストの取得
     [SerializeField] Text playerManaCostText;
     [SerializeField] Text enemyManaCostText;
@@ -164,7 +166,14 @@ public class GameManager : MonoBehaviour
      void CreateCard(int cardID, Transform hand)
     {
         CardController card = Instantiate(cardPrefab, hand, false);
-        card.Init(cardID); 
+        if (hand.name == "PlayerHand")
+        {
+            card.Init(cardID, true);
+        }
+        else
+        {
+            card.Init(cardID, false);
+        }
     }
 
     // ターンを計算する
@@ -188,7 +197,7 @@ public class GameManager : MonoBehaviour
     IEnumerator CountDown()
     {
         // 時間定義
-        timeCount = 5;
+        timeCount = 10;
         resetTimeCount();
 
         while (timeCount > 0)
@@ -272,7 +281,7 @@ public class GameManager : MonoBehaviour
             CardController enemyCard = lowerThanManaCardList[0];
 
             // カードを移動
-            enemyCard.movement.SetCardTransform(enemyFieldTransform);
+            StartCoroutine(enemyCard.movement.MoveToField(enemyFieldTransform)) ;
 
             // マナの消費
             ReduceManaCost(enemyCard.model.cost, false);
@@ -306,11 +315,17 @@ public class GameManager : MonoBehaviour
                 // defenderカードを選択 
                 CardController defender = playerFieldCardList[0];
                 // attackerとdefenderを戦わせる
+                StartCoroutine(attacker.movement.MoveToTarget(defender.transform));
+                yield return new WaitForSeconds(0.25f);
                 CardsBattle(attacker, defender);
             }
             else
             {
+                StartCoroutine(attacker.movement.MoveToTarget(playerHero.transform));
+                yield return new WaitForSeconds(0.25f);
                 AttackToHero(attacker, false);
+                yield return new WaitForSeconds(0.25f);
+                CheckHeroHP();
             }
 
             // フィールドカードの更新
@@ -351,7 +366,6 @@ public class GameManager : MonoBehaviour
         }
         attacker.SetCanAttack(false);
         RefreshHeroHP();
-        CheckHeroHP();
     } 
 
     // HeroのHPを更新する
@@ -365,15 +379,22 @@ public class GameManager : MonoBehaviour
     {
         if (playerHeroHp <= 0 || enemyHeroHp <= 0)
         {
-            resultPanel.SetActive(true);
-            if (playerHeroHp <= 0)
-            {
-                resultText.text = "You Lose";
-            }
-            else
-            {
-                resultText.text = "You Win"; 
-            }
+            ShowResultPanel(playerHeroHp);
+        }
+    }
+
+    // 結果画面の表示
+    void ShowResultPanel(int heroHP)
+    {
+        StopAllCoroutines();
+        resultPanel.SetActive(true);
+        if (heroHP <= 0)
+        {
+            resultText.text = "You Lose";
+        }
+        else
+        {
+            resultText.text = "You Win";
         }
     }
 

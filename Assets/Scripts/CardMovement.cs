@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DG.Tweening;
+
 
 // カードの動きを司る
 public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
@@ -63,9 +66,40 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         GetComponent<CanvasGroup>().blocksRaycasts = true;
     }
 
-    public void SetCardTransform(Transform parentTransform)
+    //　カードアニメーション
+    public IEnumerator MoveToField(Transform field)
     {
-        defaultParent = parentTransform;
+        //一度親をCanvasに変更する
+        transform.SetParent(defaultParent.parent);
+        //DOTweenでカードを移動する
+        transform.DOMove(field.position, 0.25f);
+        yield return new WaitForSeconds(0.25f);
+        defaultParent = field;
         transform.SetParent(defaultParent);
+    }
+
+    public IEnumerator MoveToTarget(Transform target)
+    {
+        // 現在の位置と場所を記憶する
+        Vector3 currentPosition = transform.position;
+        int siblingIndex = transform.GetSiblingIndex();
+
+        //一度親をCanvasに変更する
+        transform.SetParent(defaultParent.parent);
+        //DOTweenでカードを攻撃対象に移動する
+        transform.DOMove(target.position, 0.25f);
+
+        yield return new WaitForSeconds(0.25f);
+
+        // 元の位置に戻る
+        transform.DOMove(currentPosition, 0.25f);
+        yield return new WaitForSeconds(0.25f);
+        transform.SetParent(defaultParent);
+        transform.SetSiblingIndex(siblingIndex);
+    }
+
+    void Start()
+    {
+        defaultParent = transform.parent;
     }
 }
