@@ -315,7 +315,12 @@ public class GameManager : MonoBehaviour
             // プレイヤー側にもしカードがあれば処理を続行
             if (playerFieldCardList.Length > 0)
             {
-                // defenderカードを選択 
+                // defenderカードを選択
+                // Shieldカードがあればその中から攻撃対象を選ぶ
+                if (Array.Exists(playerFieldCardList, card => card.model.ability == ABILITY.SHIELD))
+                {
+                    playerFieldCardList = Array.FindAll(playerFieldCardList, card => card.model.ability == ABILITY.SHIELD);
+                }
                 CardController defender = playerFieldCardList[0];
                 // attackerとdefenderを戦わせる
                 StartCoroutine(attacker.movement.MoveToTarget(defender.transform));
