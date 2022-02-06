@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -18,11 +19,19 @@ public class AttackedHero : MonoBehaviour, IDropHandler
             return;
         }
 
+        //敵フィールドにシールドがいれば、攻撃できない
+        CardController[] enemyFieldCards = GameManager.instance.GetEnemyFieldCards();
+        if (Array.Exists(enemyFieldCards, card => card.model.ability == ABILITY.SHIELD))
+        {
+            return;
+        }
+
         // canAttackフラグが立っており、攻撃可能な場合のみ攻撃する
         if (attacker.model.canAttack)
         {
             //attackerがHeroに攻撃する
-            GameManager.instance.AttackToHero(attacker, true); 
+            GameManager.instance.AttackToHero(attacker, true);
+            GameManager.instance.CheckHeroHP();
         }
     }
 }

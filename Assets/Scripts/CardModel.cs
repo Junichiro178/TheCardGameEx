@@ -10,6 +10,8 @@ public class CardModel
     public int at;
     public int cost;
     public Sprite icon;
+    public ABILITY ability;
+
     public bool isAlive = true;
     public bool canAttack;
     public bool isFieldCard;
@@ -23,6 +25,7 @@ public class CardModel
         at = cardEntity.at;
         cost = cardEntity.cost;
         icon = cardEntity.icon;
+        ability = cardEntity.ability;
         isPlayerCard = isPlayer;
     }
 

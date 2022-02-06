@@ -36,12 +36,7 @@ public class DropPlace : MonoBehaviour, IDropHandler
             {
                 return;
             }
-
-            // マナコスト消費
-            GameManager.instance.ReduceManaCost(card.model.cost, true);
-
-            //　フィールドのカードであることを示す
-            card.model.isFieldCard = true;
+            card.OnField(true);
         }
     }
 }

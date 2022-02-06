@@ -11,6 +11,7 @@ public class CardView : MonoBehaviour
     [SerializeField] Text costText;
     [SerializeField] Image iconImage;
     [SerializeField] GameObject selectablePanel;
+    [SerializeField] GameObject shieldPanel;
 
     public void Show(CardModel cardModel)
     {
@@ -19,6 +20,15 @@ public class CardView : MonoBehaviour
         atText.text = cardModel.at.ToString();
         costText.text = cardModel.cost.ToString(); 
         iconImage.sprite = cardModel.icon;
+        // シールドもちの場合の見かけを帰る
+        if (cardModel.ability == ABILITY.SHIELD)
+        {
+            shieldPanel.SetActive(true);
+        }
+        else
+        {
+            shieldPanel.SetActive(false);
+        }
     }
 
     public void Refresh(CardModel cardModel)

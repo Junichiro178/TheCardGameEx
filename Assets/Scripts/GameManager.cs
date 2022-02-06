@@ -22,8 +22,8 @@ public class GameManager : MonoBehaviour
     bool isPlayerTurn;
 
     // デッキ
-    List<int> playerDeck = new List<int>() { 4, 3, 2, 1 },
-              enemyDeck  = new List<int>() { 1, 3, 2, 4 };
+    List<int> playerDeck = new List<int>() { 6, 5, 2, 1, 3, 4 },
+              enemyDeck  = new List<int>() { 6, 5, 2, 4, 3, 1 };
 
     // HPテキストの取得
     [SerializeField] Text playerHeroHpText;
@@ -131,8 +131,8 @@ public class GameManager : MonoBehaviour
         }
 
         // デッキの再取得
-        playerDeck = new List<int>() { 4, 3, 2, 1 };
-        enemyDeck = new List<int>() { 1, 3, 2, 4 };
+        playerDeck = new List<int>() { 6, 5, 2, 1, 3, 4 };
+        enemyDeck = new List<int>() { 6, 5, 2, 4, 3, 1 };
 
         StartGame();
 
@@ -209,6 +209,12 @@ public class GameManager : MonoBehaviour
         ChangeTurn();
     }
 
+    // 敵フィールドのカードを取得する関数
+    public CardController[] GetEnemyFieldCards()
+    {
+        return enemyFieldTransform.GetComponentsInChildren<CardController>();
+    }
+
     // ターンの切り替え
     public void ChangeTurn()
     {
@@ -283,11 +289,8 @@ public class GameManager : MonoBehaviour
             // カードを移動
             StartCoroutine(enemyCard.movement.MoveToField(enemyFieldTransform)) ;
 
-            // マナの消費
-            ReduceManaCost(enemyCard.model.cost, false);
-
-            //　フィールドのカードであることを示す
-            enemyCard.model.isFieldCard = true;
+            // 敵カードのアビリティ処理
+            enemyCard.OnField(false);
 
             // カードリストを更新する
             handcardList = enemyHandTransform.GetComponentsInChildren<CardController>();
@@ -316,7 +319,7 @@ public class GameManager : MonoBehaviour
                 CardController defender = playerFieldCardList[0];
                 // attackerとdefenderを戦わせる
                 StartCoroutine(attacker.movement.MoveToTarget(defender.transform));
-                yield return new WaitForSeconds(0.25f);
+                yield return new WaitForSeconds(0.51f);
                 CardsBattle(attacker, defender);
             }
             else
@@ -375,7 +378,7 @@ public class GameManager : MonoBehaviour
         enemyHeroHpText.text = enemyHeroHp.ToString();
     }
 
-    void CheckHeroHP()
+    public void CheckHeroHP()
     {
         if (playerHeroHp <= 0 || enemyHeroHp <= 0)
         {

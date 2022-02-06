@@ -33,6 +33,21 @@ public class CardController : MonoBehaviour
         SetCanAttack(false);
     }
 
+    // フィールドに置かれた時の処理
+    public void OnField(bool isPlayer)
+    {
+        // マナコスト消費
+        GameManager.instance.ReduceManaCost(model.cost, isPlayer);
+
+        //　フィールドのカードであることを示す
+        model.isFieldCard = true;
+
+        if (model.ability == ABILITY.HASTE)
+        {
+            SetCanAttack(true);
+        }
+    }
+
     // カードの生存チェック
     public void CheckAlive()
     {
